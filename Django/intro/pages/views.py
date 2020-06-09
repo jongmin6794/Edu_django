@@ -8,14 +8,14 @@ def index(request):
         'hello':hello,
         'l':lunch
     }
-    return render(request, 'index.html',context)
+    return render(request, 'pages/index.html',context)
 
 def hello(request,name, apple):
     context={
         'name':name,
         'a':apple
     }
-    return render(request,'hello.html',context)
+    return render(request, 'pages/hello.html',context)
 
 def times(request,num1,num2):
     # num1=int(num1)
@@ -31,7 +31,7 @@ def times(request,num1,num2):
         'num2':num2,
         'result':result
     }
-    return render(request,'times.html',context)
+    return render(request, 'pages/times.html',context)
 
 from datetime import datetime
 def dtl(request):
@@ -47,7 +47,7 @@ def dtl(request):
         'datetimenow' : datetimenow,
         'empty_list' : empty_list
     }
-    return render(request,'dtl.html',context)
+    return render(request, 'pages/dtl.html',context)
 
 def bday(request):
     # 1. 오늘 날짜 가져오기
@@ -57,4 +57,19 @@ def bday(request):
     context = {
         'result':result
     }
-    return render(request, 'bday.html',context)
+    return render(request, 'pages/bday.html',context)
+
+def user_new(request):
+    context = {
+
+    }
+    return render(request, 'pages/user_new.html',context)
+
+def user_create(request):
+    username = request.POST.get('username')
+    pw = request.POST.get('pw')
+    context={
+        'username': username,
+        'pw': pw    
+    }
+    return render(request, 'pages/user_create.html',context)
