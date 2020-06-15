@@ -3,8 +3,8 @@
 {% block body %}
 
 <h1>Article new</h1>
-
-<form action ="/articles/create/" method="POST">
+<form action ="" method="POST">
+<!-- <form action ="/articles/create/" method="POST"> -->
     {% csrf_token %}
     <label for="title">제목</label>
     <input id="title" type="text" name="title">

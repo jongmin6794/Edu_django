@@ -11,11 +11,24 @@ def index(request):
     }
     return render(request, 'articles/index.html',context)
 
-def new(request): # GET
-    context = {
+def new(request): # GET + POST
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
 
-    }
-    return render(request, 'articles/new.html',context)
+        # Database에 저장
+        # 1. Article 인스턴스 생성
+        article = Article(title=title, content=content)
+        # 2. 저장!
+        article.save()
+
+        return redirect('articles:detail', article.pk)
+    
+    else:
+        context = {
+
+        }
+        return render(request, 'articles/new.html',context)
 
 def create(request): # POST
     title = request.POST.get('title')
@@ -23,10 +36,12 @@ def create(request): # POST
 
     # Database에 저장
     # 1. Article 인스턴스 생성
-    article = Article(title=title,content=content)
+    article = Article(title=title, content=content)
     # 2. 저장!
     article.save()
-    return redirect(f'/articles/detail/{article.pk}/')
+    
+    # return redirect(f'/articles/detail/{article.pk}/')
+    return redirect('articles:detail', article.pk)
     # return redirect('/articles/detail/'+str(article.pk))
    
     # context = {
@@ -51,22 +66,42 @@ def delete(request,pk): # POST
     # 2. 삭제
     article.delete()
     
-    return redirect('/articles/index/')
+    # return redirect('/articles/index/')
+    return redirect('articles:index')
 
 def edit(request, pk): # GET
     # Database 조회( + 저장)
     # 1. 조회
     article = Article.objects.get(pk=pk)
     
-    context = {
-        'article' : article,
-    }
-    return render(request, 'articles/edit.html', context)
+    if request.method == 'POST':
+        # 게시글 수정 수행!
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        # Database 조회 + 수정 + 저장
+
+        # 2. 수정
+        article.title = titlearticle.content = content
+        # 3. 저장
+        article.save()
+
+        return redirect('articles:detail',article.pk)
+    else:
+        # 게시글 수정 양식!
+
+        # Database 조회( + 저장)
+
+        context = {
+            'article' : article,
+        }
+        return render(request, 'articles/edit.html', context)
 
 def update(request, pk): # POST
     title = request.POST.get('title')
     content = request.POST.get('content')
-    # Database 조회 + 수정
+    
+    # Database 조회 + 수정 + 저장
     # 1. 조회
     article = Article.objects.get(pk=pk)
     # 2. 수정
@@ -74,4 +109,6 @@ def update(request, pk): # POST
     article.content = content
     # 3. 저장
     article.save()
-    return redirect(f'/articles/detail/{article.pk}/')
+    
+    return redirect('articles:detail', article.pk)
+    # return redirect(f'/articles/detail/{article.pk}/')
